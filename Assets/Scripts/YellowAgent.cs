@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class YellowAgent : MonoBehaviour
 {
+    public int yellowValue;
+
     // Start is called before the first frame update
     void Start()
     {

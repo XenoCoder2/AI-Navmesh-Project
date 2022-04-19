@@ -3,7 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Blue
+  - Yellow
+  - Green
+  - BlueCollect
+  - YellowCollect
+  - GreenCollect
+  - BlueKey
+  - YellowKey
+  - GreenKey
+  - BW
+  - YW
+  - GW
+  - BD
+  - YD
+  - GD
   layers:
   - Default
   - TransparentFX
@@ -12,7 +27,7 @@ TagManager:
   - Water
   - UI
   - Platform
-  - 
+  - SecondPlatform
   - 
   - 
   - 

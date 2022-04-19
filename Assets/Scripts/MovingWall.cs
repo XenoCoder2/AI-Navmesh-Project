@@ -6,9 +6,18 @@ public class MovingWall : MonoBehaviour
 {
     public Transform[] wallPoints = new Transform[2];
     Vector2 currentTransform;
-    public float timerCount;
+    private float _timerCount;
+    private float _closeTime;
     public float speed;
     [SerializeField] private float timer;
+    public float timeUntilClose;
+   
+
+    private void Start()
+    {
+        _timerCount = timer;
+        _closeTime = timeUntilClose;
+    }
 
     // Update is called once per frame
     void Update()
@@ -19,25 +28,34 @@ public class MovingWall : MonoBehaviour
        
         if (timer <= 0)
         {
-            StartCoroutine(MoveWall(wallPoints[1], wallPoints[0]));
+            timeUntilClose -= Time.deltaTime;
 
+            if (timeUntilClose <= 0)
+            {
+                MoveUp(wallPoints[1], wallPoints[0]);
+                
+            }
+            else
+            {
+                MoveDown(wallPoints[1], wallPoints[0]);
+                
+            }
         }
     }
 
-
-    IEnumerator MoveWall(Transform ground, Transform startPosition)
+    void MoveDown(Transform ground, Transform startPosition)
     {
-        
         if (Vector2.Distance(currentTransform, ground.position) > 0.01f)
         {
             Vector2 directionToGoal = ground.position - transform.position;
             directionToGoal.Normalize();
             transform.position += speed * Time.deltaTime * (Vector3)directionToGoal;
-            
         }
+   
+    }
 
-        yield return new WaitForSecondsRealtime(timerCount);
-
+    void MoveUp(Transform ground, Transform startPosition)
+    {
         if (Vector2.Distance(currentTransform, startPosition.position) > 0.01f)
         {
             Vector2 directionToGoal = startPosition.position - transform.position;
@@ -45,7 +63,12 @@ public class MovingWall : MonoBehaviour
             transform.position += speed * Time.deltaTime * (Vector3)directionToGoal;
 
         }
+        else
+        {
+            timer = _timerCount;
+            timeUntilClose = _closeTime;
+        }
 
-        timer = timerCount;
+
     }
 }

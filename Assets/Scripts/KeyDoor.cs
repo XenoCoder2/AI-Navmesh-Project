@@ -5,33 +5,39 @@ using UnityEngine;
 public class KeyDoor : MonoBehaviour
 {
     public Transform[] wallPoints = new Transform[2];
-    public static int keyCount;
+    Vector2 _currentTransform;
+    public BoxCollider boxCollide;
+    public bool doorActive;
+    public int doorValue;
     public string agent;
-   
-    private void OnCollisionEnter(Collision collision)
+
+    void Update()
     {
-        if (collision.collider.CompareTag(agent))
+        _currentTransform = transform.position;
+
+        if (doorActive && Vector2.Distance(_currentTransform, wallPoints[1].position) > 0.01f)
         {
-            if (keyCount > 0)
+            MoveWall(wallPoints[1], wallPoints[0]);
+
+            if (boxCollide.enabled)
             {
-                StartCoroutine(MoveWall());
+                boxCollide.enabled = false;
             }
         }
     }
 
-    IEnumerator MoveWall()
+    void MoveWall(Transform ground, Transform startPosition)
     {
-        Vector3 loweredPos = new Vector3(transform.position.x, -7.5f, transform.position.z);
-
-        if (Vector2.Distance(transform.position, loweredPos) > 0.01f)
+        if (Vector2.Distance(_currentTransform, ground.position) > 0.01f)
         {
-            Vector2 directionToGoal = loweredPos - transform.position;
+            Vector2 directionToGoal = ground.position - transform.position;
             directionToGoal.Normalize();
             transform.position += 3 * Time.deltaTime * (Vector3)directionToGoal;
-
         }
 
-        keyCount--;
-        yield return null;
+        BlueAgent.blueKeyCount -= 1;
+
     }
+
+    
 }
