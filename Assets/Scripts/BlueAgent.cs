@@ -18,6 +18,7 @@ public class BlueAgent : AIMovement
     public static int blueKeyCount;
     public int keySearch;
 
+
     // Start is called before the first frame update
     public void Start()
     {
@@ -28,13 +29,6 @@ public class BlueAgent : AIMovement
         NextState();
 
     }
-
-    // Update is called once per frame
-    public void Update()
-    {
-
-    }
-
     public void NextState()
     {
         switch (agentStates)
@@ -68,7 +62,8 @@ public class BlueAgent : AIMovement
                     agentStates = States.NavigatingToEnd;
                 }
 
-                if (Vector2.Distance(transform.position, collectables[blueSearch].transform.position) > 30f || blueValue == collectables.Count)
+                if (Vector3.Distance(transform.position, collectables[blueSearch].transform.position) > 15f 
+                    && Vector3.Distance(transform.position, guides[waypointValue].position) <= 30f || blueValue == collectables.Count || Vector3.Distance(transform.position, collectables[blueSearch].transform.position) > 60f)
                 {
                     agentStates = States.NavigatingToEnd;
                 }
@@ -122,13 +117,13 @@ public class BlueAgent : AIMovement
 
             if (collectables[blueSearch] != null)
             {
-                if (Vector2.Distance(transform.position, collectables[blueSearch].transform.position) <= 30f && agentStates != States.KeySearch)
+                if (Vector3.Distance(transform.position, collectables[blueSearch].transform.position) <= 15f && agentStates != States.KeySearch
+                    || Vector3.Distance(transform.position, guides[waypointValue].position) > 30f && Vector3.Distance(transform.position, collectables[blueSearch].transform.position) < 60f)
                 {
                     agentStates = States.Collecting;
                 }
             }
             
-
             yield return null;
         }
 

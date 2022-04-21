@@ -1,20 +1,189 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class GreenAgent : MonoBehaviour
+public class GreenAgent : AIMovement
 {
+    public enum States
+    {
+        Collecting,
+        KeySearch,
+        NavigatingToEnd,
+    }
+    public States agentStates;
+
     public int greenValue;
+    private int greenSearch;
+    public static int greenKeyCount;
+    public int keySearch;
+    private float _navDist;
+    private float _collectDist;
+
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
+        Application.targetFrameRate = 165;
+        _navAgent = GetComponent<NavMeshAgent>();
+        collectables.AddRange(GameObject.FindGameObjectsWithTag("GreenCollect"));
+        agentStates = States.NavigatingToEnd;
+        NextState();
+
+    }
+    public void NextState()
+    {
+        switch (agentStates)
+        {
+            case States.Collecting:
+                StartCoroutine(CollectingState());
+                break;
+            case States.KeySearch:
+                StartCoroutine(KeySearchState());
+                break;
+            case States.NavigatingToEnd:
+                StartCoroutine(EndNavState());
+                break;
+            default:
+                break;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator CollectingState()
     {
-        
+        while (agentStates == States.Collecting)
+        {
+            if (collectables[greenSearch] != null)
+            {
+                if (greenValue != collectables.Count)
+                {
+                    _navAgent.SetDestination(collectables[greenSearch].transform.position);
+                }
+                else
+                {
+                    agentStates = States.NavigatingToEnd;
+                }
+
+                if (waypointValue != guides.Count - 1)
+                {
+                    _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
+                }
+                if (collectables[greenSearch] != null)
+                {
+                    _collectDist = Vector3.Distance(transform.position, collectables[greenSearch].transform.position);
+                }
+
+                if (_navDist < _collectDist && collectables[greenSearch] != null)
+                {
+                    agentStates = States.NavigatingToEnd;
+                }
+
+                //if (Vector3.Distance(transform.position, collectables[greenSearch].transform.position) > 15f
+                //    && Vector3.Distance(transform.position, guides[waypointValue].position) <= 30f || greenValue == collectables.Count || Vector3.Distance(transform.position, collectables[greenSearch].transform.position) > 60f)
+                //{
+                //    agentStates = States.NavigatingToEnd;
+                //}
+
+            }
+            else
+            {
+                agentStates = States.NavigatingToEnd;
+            }
+
+            yield return null;
+        }
+
+        NextState();
+
+    }
+
+    private IEnumerator KeySearchState()
+    {
+        while (agentStates == States.KeySearch)
+        {
+            if (greenKeyCount > 0 || keys[keySearch] == null)
+            {
+                agentStates = States.NavigatingToEnd;
+                NextState();
+            }
+            else if (greenKeyCount == 0 && keys[keySearch] != null)
+            {
+                _navAgent.SetDestination(keys[keySearch].transform.position);
+            }
+
+            yield return null;
+        }
+
+        NextState();
+    }
+
+    private IEnumerator EndNavState()
+    {
+        while (agentStates == States.NavigatingToEnd)
+        {
+            if (waypointValue != guides.Count)
+            {
+                _navAgent.SetDestination(guides[waypointValue].position);
+
+                if (Vector3.Distance(transform.position, guides[waypointValue].position) <= 1.5f && waypointValue != guides.Count - 1)
+                {
+                    waypointValue++;
+                }
+            }
+
+            if (waypointValue != guides.Count - 1)
+            {
+                _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
+            }
+            if (collectables[greenSearch] != null)
+            {
+                _collectDist = Vector3.Distance(transform.position, collectables[greenSearch].transform.position);
+            }
+           
+            if (_navDist > _collectDist && collectables[greenSearch] != null)
+            {
+                agentStates = States.Collecting;
+            }
+           
+
+            //if (Vector3.Distance(transform.position, collectables[greenSearch].transform.position) <= 15f && agentStates != States.KeySearch
+            //    || Vector3.Distance(transform.position, guides[waypointValue].position) > 30f || Vector3.Distance(transform.position, collectables[greenSearch].transform.position) < 40f)
+            //{
+
+            //}
+            yield return null;
+        }
+
+        NextState();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("GreenCollect"))
+        {
+            greenValue += other.gameObject.GetComponent<Collectable>().value;
+            if (greenSearch != collectables.Count - 1)
+            {
+                greenSearch += other.gameObject.GetComponent<Collectable>().value;
+            }
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("GreenKey"))
+        {
+            greenKeyCount += 1;
+            doors[keySearch].GetComponent<KeyDoor>().doorActive = true;
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("GD"))
+        {
+            if (greenKeyCount == 0 && other.gameObject != null)
+            {
+                keySearch = other.gameObject.GetComponent<KeyDoor>().doorValue;
+                agentStates = States.KeySearch;
+                NextState();
+            }
+        }
     }
 }

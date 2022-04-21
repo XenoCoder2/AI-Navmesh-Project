@@ -17,16 +17,30 @@ public class KeyDoor : MonoBehaviour
 
         if (doorActive && Vector2.Distance(_currentTransform, wallPoints[1].position) > 0.01f)
         {
-            MoveWall(wallPoints[1], wallPoints[0]);
-
+            StartCoroutine(MoveWall(wallPoints[1], wallPoints[0]));
             if (boxCollide.enabled)
             {
+                switch (agent)
+                {
+                    case "Blue":
+                        BlueAgent.blueKeyCount -= 1;
+                        break;
+                    case "Green":
+                        GreenAgent.greenKeyCount -= 1;
+                        break;
+                    case "Yellow":
+                        //YellowAgent.yellowKeyCount -= 1;
+                        break;
+                    default:
+                        break;
+                }
+               
                 boxCollide.enabled = false;
             }
         }
     }
 
-    void MoveWall(Transform ground, Transform startPosition)
+    IEnumerator MoveWall(Transform ground, Transform startPosition)
     {
         if (Vector2.Distance(_currentTransform, ground.position) > 0.01f)
         {
@@ -35,9 +49,13 @@ public class KeyDoor : MonoBehaviour
             transform.position += 3 * Time.deltaTime * (Vector3)directionToGoal;
         }
 
-        BlueAgent.blueKeyCount -= 1;
+        yield return new WaitForSeconds(10f);
+
+        Destroy(gameObject);
+
+
 
     }
 
-    
+
 }
