@@ -31,6 +31,12 @@ public class GreenAgent : AIMovement
         NextState();
 
     }
+
+    protected override void Update()
+    {
+        base.Update();
+    }
+
     public void NextState()
     {
         switch (agentStates)
@@ -77,13 +83,6 @@ public class GreenAgent : AIMovement
                 {
                     agentStates = States.NavigatingToEnd;
                 }
-
-                //if (Vector3.Distance(transform.position, collectables[greenSearch].transform.position) > 15f
-                //    && Vector3.Distance(transform.position, guides[waypointValue].position) <= 30f || greenValue == collectables.Count || Vector3.Distance(transform.position, collectables[greenSearch].transform.position) > 60f)
-                //{
-                //    agentStates = States.NavigatingToEnd;
-                //}
-
             }
             else
             {
@@ -144,13 +143,7 @@ public class GreenAgent : AIMovement
             {
                 agentStates = States.Collecting;
             }
-           
 
-            //if (Vector3.Distance(transform.position, collectables[greenSearch].transform.position) <= 15f && agentStates != States.KeySearch
-            //    || Vector3.Distance(transform.position, guides[waypointValue].position) > 30f || Vector3.Distance(transform.position, collectables[greenSearch].transform.position) < 40f)
-            //{
-
-            //}
             yield return null;
         }
 
@@ -172,7 +165,7 @@ public class GreenAgent : AIMovement
         if (other.CompareTag("GreenKey"))
         {
             greenKeyCount += 1;
-            doors[keySearch].GetComponent<KeyDoor>().doorActive = true;
+            doors[keySearch].GetComponent<KeyDoor>().doorActive = true; 
             Destroy(other.gameObject);
         }
 

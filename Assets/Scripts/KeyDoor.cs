@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KeyDoor : MonoBehaviour
 {
+    [Tooltip("Element 0 should be the initial position and so Element 1 is the downwards position.")]
     public Transform[] wallPoints = new Transform[2];
     Vector2 _currentTransform;
     public BoxCollider boxCollide;
@@ -29,7 +30,7 @@ public class KeyDoor : MonoBehaviour
                         GreenAgent.greenKeyCount -= 1;
                         break;
                     case "Yellow":
-                        //YellowAgent.yellowKeyCount -= 1;
+                        YellowAgent.yellowKeyCount -= 1;
                         break;
                     default:
                         break;

@@ -11,9 +11,9 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: High Cost
+  - name: High Cost Grass
     cost: 10
-  - name: Door Vicinity
+  - name: 
     cost: 1
   - name: 
     cost: 1
@@ -126,6 +126,6 @@ NavMeshProjectSettings:
     debug:
       m_Flags: 0
   m_SettingNames:
-  - Humanoid
-  - Ogre
   - Platformer
+  - Ogre
+  - Human

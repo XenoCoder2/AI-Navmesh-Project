@@ -111,7 +111,7 @@ public class CameraSwitch : MonoBehaviour
 
             }
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (_viewType != 1)
             {
@@ -133,31 +133,6 @@ public class CameraSwitch : MonoBehaviour
                 {
                     aiCameras[_curCamera].SetActive(true);
                     otsCameras[_curCamera].SetActive(false);
-                }
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            if (_viewType != 0)
-            {
-                _viewType--;
-            }
-            else
-            {
-                _viewType = otsCameras.Length - 1;
-            }
-
-            for (int i = 0; i < otsCameras.Length; i++)
-            {
-                if (_viewType == 0)
-                {
-                    aiCameras[_curCamera].SetActive(true);
-                    otsCameras[_curCamera].SetActive(false);
-                }
-                else
-                {
-                    otsCameras[_curCamera].SetActive(true);
-                    aiCameras[i].SetActive(false);
                 }
             }
         }

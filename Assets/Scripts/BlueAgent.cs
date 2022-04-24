@@ -17,7 +17,8 @@ public class BlueAgent : AIMovement
     private int blueSearch;
     public static int blueKeyCount;
     public int keySearch;
-
+    private float _navDist;
+    private float _collectDist;
 
     // Start is called before the first frame update
     public void Start()
@@ -29,6 +30,12 @@ public class BlueAgent : AIMovement
         NextState();
 
     }
+
+    protected override void Update()
+    {
+        base.Update();
+    }
+
     public void NextState()
     {
         switch (agentStates)
@@ -53,17 +60,33 @@ public class BlueAgent : AIMovement
         {
             if (collectables[blueSearch] != null)
             {
-                if (blueValue != collectables.Count)
+                if (collectables[blueSearch] != null)
                 {
-                    _navAgent.SetDestination(collectables[blueSearch].transform.position);
+                    if (blueSearch != collectables.Count)
+                    {
+                        _navAgent.SetDestination(collectables[blueSearch].transform.position);
+                    }
+                    else
+                    {
+                        agentStates = States.NavigatingToEnd;
+                    }
+
+                    if (waypointValue != guides.Count - 1)
+                    {
+                        _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
+                    }
+                    if (collectables[blueSearch] != null)
+                    {
+                        _collectDist = Vector3.Distance(transform.position, collectables[blueSearch].transform.position);
+                    }
+
+                    if (_navDist < _collectDist && collectables[blueSearch] != null)
+                    {
+                        agentStates = States.NavigatingToEnd;
+                    }
+
                 }
                 else
-                {
-                    agentStates = States.NavigatingToEnd;
-                }
-
-                if (Vector3.Distance(transform.position, collectables[blueSearch].transform.position) > 15f 
-                    && Vector3.Distance(transform.position, guides[waypointValue].position) <= 30f || blueValue == collectables.Count || Vector3.Distance(transform.position, collectables[blueSearch].transform.position) > 60f)
                 {
                     agentStates = States.NavigatingToEnd;
                 }
@@ -109,21 +132,25 @@ public class BlueAgent : AIMovement
             {
                 _navAgent.SetDestination(guides[waypointValue].position);
 
-                if (Vector3.Distance(transform.position, guides[waypointValue].position) <= 1.5f)
+                if (Vector3.Distance(transform.position, guides[waypointValue].position) <= 1.5f && waypointValue != guides.Count - 1)
                 {
                     waypointValue++;
                 }
             }
 
+            if (waypointValue != guides.Count - 1)
+            {
+                _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
+            }
             if (collectables[blueSearch] != null)
             {
-                if (Vector3.Distance(transform.position, collectables[blueSearch].transform.position) <= 15f && agentStates != States.KeySearch
-                    || Vector3.Distance(transform.position, guides[waypointValue].position) > 30f && Vector3.Distance(transform.position, collectables[blueSearch].transform.position) < 60f)
-                {
-                    agentStates = States.Collecting;
-                }
+                _collectDist = Vector3.Distance(transform.position, collectables[blueSearch].transform.position);
             }
-            
+
+            if (_navDist > _collectDist && collectables[blueSearch] != null)
+            {
+                agentStates = States.Collecting;
+            }
             yield return null;
         }
 
