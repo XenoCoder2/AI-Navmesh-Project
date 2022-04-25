@@ -19,6 +19,7 @@ TagManager:
   - BD
   - YD
   - GD
+  - End
   layers:
   - Default
   - TransparentFX

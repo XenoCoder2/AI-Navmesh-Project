@@ -5,16 +5,8 @@ using UnityEngine.AI;
 
 public class GreenAgent : AIMovement
 {
-    public enum States
-    {
-        Collecting,
-        KeySearch,
-        NavigatingToEnd,
-    }
-    public States agentStates;
-
     public int greenValue;
-    private int greenSearch;
+    private int _greenSearch;
     public static int greenKeyCount;
     public int keySearch;
     private float _navDist;
@@ -59,11 +51,11 @@ public class GreenAgent : AIMovement
     {
         while (agentStates == States.Collecting)
         {
-            if (collectables[greenSearch] != null)
+            if (collectables[_greenSearch] != null)
             {
                 if (greenValue != collectables.Count)
                 {
-                    _navAgent.SetDestination(collectables[greenSearch].transform.position);
+                    _navAgent.SetDestination(collectables[_greenSearch].transform.position);
                 }
                 else
                 {
@@ -74,12 +66,12 @@ public class GreenAgent : AIMovement
                 {
                     _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
                 }
-                if (collectables[greenSearch] != null)
+                if (collectables[_greenSearch] != null)
                 {
-                    _collectDist = Vector3.Distance(transform.position, collectables[greenSearch].transform.position);
+                    _collectDist = Vector3.Distance(transform.position, collectables[_greenSearch].transform.position);
                 }
 
-                if (_navDist < _collectDist && collectables[greenSearch] != null)
+                if (_navDist < _collectDist && collectables[_greenSearch] != null)
                 {
                     agentStates = States.NavigatingToEnd;
                 }
@@ -134,12 +126,12 @@ public class GreenAgent : AIMovement
             {
                 _navDist = Vector3.Distance(transform.position, guides[waypointValue].position);
             }
-            if (collectables[greenSearch] != null)
+            if (collectables[_greenSearch] != null)
             {
-                _collectDist = Vector3.Distance(transform.position, collectables[greenSearch].transform.position);
+                _collectDist = Vector3.Distance(transform.position, collectables[_greenSearch].transform.position);
             }
            
-            if (_navDist > _collectDist && collectables[greenSearch] != null)
+            if (_navDist > _collectDist && collectables[_greenSearch] != null)
             {
                 agentStates = States.Collecting;
             }
@@ -155,15 +147,16 @@ public class GreenAgent : AIMovement
         if (other.CompareTag("GreenCollect"))
         {
             greenValue += other.gameObject.GetComponent<Collectable>().value;
-            if (greenSearch != collectables.Count - 1)
+            if (_greenSearch != collectables.Count - 1)
             {
-                greenSearch += other.gameObject.GetComponent<Collectable>().value;
+                _greenSearch += other.gameObject.GetComponent<Collectable>().value;
             }
             Destroy(other.gameObject);
         }
 
         if (other.CompareTag("GreenKey"))
         {
+            keysCollected++;
             greenKeyCount += 1;
             doors[keySearch].GetComponent<KeyDoor>().doorActive = true; 
             Destroy(other.gameObject);
@@ -177,6 +170,11 @@ public class GreenAgent : AIMovement
                 agentStates = States.KeySearch;
                 NextState();
             }
+        }
+
+        if (other.CompareTag("End"))
+        {
+            finishedMaze = true;
         }
     }
 }

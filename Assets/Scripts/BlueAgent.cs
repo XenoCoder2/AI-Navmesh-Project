@@ -5,14 +5,6 @@ using UnityEngine.AI;
 
 public class BlueAgent : AIMovement
 {
-    public enum States
-    {
-        Collecting,
-        KeySearch,
-        NavigatingToEnd,
-    }
-    public States agentStates;
-
     public int blueValue;
     private int blueSearch;
     public static int blueKeyCount;
@@ -171,6 +163,7 @@ public class BlueAgent : AIMovement
 
         if (other.CompareTag("BlueKey"))
         {
+            keysCollected++;
             blueKeyCount += 1;
             doors[keySearch].GetComponent<KeyDoor>().doorActive = true;
             Destroy(other.gameObject);
@@ -184,6 +177,11 @@ public class BlueAgent : AIMovement
                 agentStates = States.KeySearch;
                 NextState();
             }
+        }
+
+        if (other.CompareTag("End"))
+        {
+            finishedMaze = true;
         }
     }
 }

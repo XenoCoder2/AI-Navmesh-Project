@@ -5,14 +5,6 @@ using UnityEngine.AI;
 
 public class YellowAgent : AIMovement
 {
-    public enum States
-    {
-        Collecting,
-        KeySearch,
-        NavigatingToEnd,
-    }
-    public States agentStates;
-
     public int yellowValue;
     private int yellowSearch;
     public static int yellowKeyCount;
@@ -160,6 +152,7 @@ public class YellowAgent : AIMovement
 
         if (other.CompareTag("YellowKey"))
         {
+            keysCollected++;
             yellowKeyCount += 1;
             doors[keySearch].GetComponent<KeyDoor>().doorActive = true;
             if (keySearch == 1)
@@ -177,6 +170,11 @@ public class YellowAgent : AIMovement
                 agentStates = States.KeySearch;
                 NextState();
             }
+        }
+
+        if (other.CompareTag("End"))
+        {
+            finishedMaze = true;
         }
     }
 }

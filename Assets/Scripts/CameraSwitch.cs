@@ -6,7 +6,7 @@ public class CameraSwitch : MonoBehaviour
 {
     public GameObject[] aiCameras;
     public GameObject[] otsCameras;
-    private int _curCamera;
+    public int curCamera;
     private int _viewType;
 
     // Update is called once per frame
@@ -16,13 +16,13 @@ public class CameraSwitch : MonoBehaviour
         {
             int otsCam = 0;
 
-            if (_curCamera != 0)
+            if (curCamera != 0)
             {
-                _curCamera--;
+                curCamera--;
             }
             else
             {
-                _curCamera = aiCameras.Length - 1;
+                curCamera = aiCameras.Length - 1;
             }
 
             for (int i = 0; i < otsCameras.Length; i++)
@@ -37,9 +37,9 @@ public class CameraSwitch : MonoBehaviour
             {
                 if (_viewType == 0)
                 {
-                    if (i == _curCamera)
+                    if (i == curCamera)
                     {
-                        aiCameras[_curCamera].SetActive(true);
+                        aiCameras[curCamera].SetActive(true);
                     }
                     else
                     {
@@ -48,9 +48,9 @@ public class CameraSwitch : MonoBehaviour
                 }
                 else
                 {
-                    if (i == _curCamera)
+                    if (i == curCamera)
                     {
-                        otsCameras[_curCamera].SetActive(true);
+                        otsCameras[curCamera].SetActive(true);
                     }
                     else
                     {
@@ -66,13 +66,13 @@ public class CameraSwitch : MonoBehaviour
         {
             int otsCam = 0;
 
-            if (_curCamera != aiCameras.Length - 1)
+            if (curCamera != aiCameras.Length - 1)
             {
-                _curCamera++;
+                curCamera++;
             }
             else
             {
-                _curCamera = 0;
+                curCamera = 0;
             }
 
             for (int i = 0; i < otsCameras.Length; i++)
@@ -87,9 +87,9 @@ public class CameraSwitch : MonoBehaviour
             {
                 if (_viewType == 0)
                 {
-                    if (i == _curCamera)
+                    if (i == curCamera)
                     {
-                        aiCameras[_curCamera].SetActive(true);
+                        aiCameras[curCamera].SetActive(true);
                     }
                     else
                     {
@@ -98,9 +98,9 @@ public class CameraSwitch : MonoBehaviour
                 }
                 else
                 {
-                    if (i == _curCamera)
+                    if (i == curCamera)
                     {
-                        otsCameras[_curCamera].SetActive(true);
+                        otsCameras[curCamera].SetActive(true);
                     }
                     else
                     {
@@ -126,13 +126,13 @@ public class CameraSwitch : MonoBehaviour
             {
                 if (_viewType == 1)
                 {
-                    otsCameras[_curCamera].SetActive(true);
-                    aiCameras[_curCamera].SetActive(false);
+                    otsCameras[curCamera].SetActive(true);
+                    aiCameras[curCamera].SetActive(false);
                 }
                 else
                 {
-                    aiCameras[_curCamera].SetActive(true);
-                    otsCameras[_curCamera].SetActive(false);
+                    aiCameras[curCamera].SetActive(true);
+                    otsCameras[curCamera].SetActive(false);
                 }
             }
         }
