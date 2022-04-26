@@ -24,13 +24,20 @@ public class AIMovement : MonoBehaviour
 
     public void UpdateAnim()
     {
-        if (_navAgent.velocity.magnitude < moveThreshold)
+        if (!finishedMaze)
         {
-            anim.SetBool("IsWalking", false);
+            if (_navAgent.velocity.magnitude < moveThreshold)
+            {
+                anim.SetBool("IsWalking", false);
+            }
+            else
+            {
+                anim.SetBool("IsWalking", true);
+            }
         }
         else
         {
-            anim.SetBool("IsWalking", true);
+            anim.SetBool("IsFinished", true);
         }
     }
 
@@ -45,9 +52,7 @@ public class AIMovement : MonoBehaviour
 
     public void ChangeAreaSpeed()
     {
-        NavMeshHit hitNav;
-
-        _navAgent.SamplePathPosition(-1, 0.0f, out hitNav);
+        _navAgent.SamplePathPosition(-1, 0.0f, out NavMeshHit hitNav);
 
         int grass = 1 << NavMesh.GetAreaFromName("High Cost Grass");
 
