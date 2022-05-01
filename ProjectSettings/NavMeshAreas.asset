@@ -15,8 +15,8 @@ NavMeshProjectSettings:
     cost: 10
   - name: Medium Cost Mud
     cost: 5
-  - name: 
-    cost: 1
+  - name: Low Cost Dirt
+    cost: 3
   - name: 
     cost: 1
   - name: 

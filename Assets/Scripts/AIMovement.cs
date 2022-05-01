@@ -96,7 +96,7 @@ public class AIMovement : MonoBehaviour
 
     #region Change Area Speed method
     //Change Area Speed
-    // - Checks what type of NavMesh the agent is on and applies a certain speed to the agent.
+    // - Checks what area type of NavMesh the agent is on and applies a certain speed to the agent.
     public void ChangeAreaSpeed()
     {
         //Checks whether a NavMesh was hit.
@@ -104,8 +104,10 @@ public class AIMovement : MonoBehaviour
 
         //Create an int to indicate if it was grass.
         int grass = 1 << NavMesh.GetAreaFromName("High Cost Grass");
-        //Create an int to indicate if it was mud.s
+        //Create an int to indicate if it was mud.
         int mud = 1 << NavMesh.GetAreaFromName("Medium Cost Mud");
+        //Create an int to indicate if it was dirt.
+        int dirt = 1 << NavMesh.GetAreaFromName("Low Cost Dirt");
 
         //If the hit NavMesh was grass.
         if (hitNav.mask == grass)
@@ -118,6 +120,16 @@ public class AIMovement : MonoBehaviour
         {
             //Change the agent speed to 2f.
             _navAgent.speed = 2f;
+        }
+        else if (hitNav.mask == dirt)
+        {
+            //If the Agent is not Ogre.
+            if (_navAgent.agentTypeID != 2)
+            {
+                //Change the agent speed to 2f.
+                _navAgent.speed = 2.5f;
+            }
+           
         }
         //Else the hit was a normal ground surface.
         else

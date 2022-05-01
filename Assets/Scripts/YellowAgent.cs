@@ -259,6 +259,12 @@ public class YellowAgent : AIMovement
                 //Run the NextState method.
                 NextState();
             }
+            //If the waypointValue is equal to 4.
+            if (waypointValue == 4)
+            {
+                //Imcrease it by 1 so it moves to the next waypoint once it has picked up the key.
+                waypointValue++;
+            }
         }
 
         //If the other tag is End.

@@ -6464,7 +6464,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20734
+  m_Name: pb_Mesh26994
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -31880,7 +31880,6 @@ GameObject:
   - component: {fileID: 1399013482}
   - component: {fileID: 1399013481}
   - component: {fileID: 1399013480}
-  - component: {fileID: 1399013485}
   - component: {fileID: 1399013486}
   - component: {fileID: 1399013487}
   m_Layer: 0
@@ -32183,18 +32182,6 @@ Transform:
   m_Father: {fileID: 1655734080}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1399013485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1399013479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7320c0fdc4275c41b51cba937ec14ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!208 &1399013486
 NavMeshObstacle:
   m_ObjectHideFlags: 0
